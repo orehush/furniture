@@ -1,6 +1,7 @@
 from django.db import models
 
 from apps.constructor.choices import InputItemType, CalculatedItemBaseType
+from apps.constructor.utils import eval_formula
 from apps.project.models import Project
 
 
@@ -13,6 +14,9 @@ class NightstandTemplate(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_inputs(self):
+        return self.inputs.all()
 
 
 class NightstandInputItemTemplate(models.Model):
@@ -38,6 +42,7 @@ class NightstandCalculatedItemTemplate(models.Model):
     name = models.CharField(max_length=255)
     base = models.CharField(max_length=20, choices=CalculatedItemBaseType.choices)
     nightstand = models.ForeignKey(NightstandTemplate, on_delete=models.CASCADE, related_name='outputs')
+    formula_name = models.CharField(max_length=50, default='')
     width_formula = models.CharField(max_length=255, blank=True, default='')
     length_formula = models.CharField(max_length=255, blank=True, default='')
     amount_formula = models.CharField(max_length=255, blank=True, default='')
@@ -61,6 +66,12 @@ class Nightstand(models.Model):
 
     def __str__(self):
         return f'{self.template}'
+
+    def get_inputs(self):
+        result = {}
+        for input_item in self.inputs.all():
+            result[input_item.template.formula_name] = input_item.value
+        return result
 
 
 class NightstandInputItem(models.Model):
@@ -94,3 +105,24 @@ class NightstandCalculatedItem(models.Model):
 
     def __str__(self):
         return f'{self.template} для {self.nightstand}'
+
+    def _calculate(self, field, inputs):
+        formula = getattr(self.template, f'{field}_formula', None)
+        if not formula:
+            return None
+        return eval_formula(formula, inputs)
+
+    def calculate(self):
+        inputs = self.nightstand.get_inputs()
+        self.width = self._calculate('width', inputs)
+        self.length = self._calculate('length', inputs)
+        self.amount = self._calculate('amount', inputs)
+        self.square = self._calculate('square', inputs)
+        self.square_extra = self._calculate('square_extra', inputs)
+        self.edge = self._calculate('edge', inputs)
+        self.edge_extra = self._calculate('edge_extra', inputs)
+        self.drilling_count = self._calculate('drilling_count', inputs)
+
+    def save(self, **kwargs):
+        self.calculate()
+        super(NightstandCalculatedItem, self).save(**kwargs)
