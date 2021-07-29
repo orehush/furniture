@@ -11,6 +11,7 @@ class NightstandTemplate(models.Model):
         verbose_name_plural = 'Шаблони тумб'
 
     name = models.CharField(max_length=255)
+    image = models.ImageField(null=True, blank=True)
 
     def __str__(self):
         return self.name

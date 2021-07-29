@@ -40,6 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'rest_framework',
+    'drf_yasg',
+
     'apps.project',
     'apps.constructor',
 ]
@@ -75,6 +78,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'furniture.wsgi.application'
 
+
+REST_FRAMEWORK = {
+    'PAGE_SIZE': 10
+}
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
