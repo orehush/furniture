@@ -38,7 +38,7 @@ class NightstandInputItemTemplate(models.Model):
 class NightstandCalculatedItemTemplate(models.Model):
     class Meta:
         verbose_name = 'Шаблон розрахункового елемента'
-        verbose_name_plural = 'Шаблони разрахункових елементів'
+        verbose_name_plural = 'Шаблони розрахункових елементів'
 
     name = models.CharField(max_length=255)
     base = models.CharField(max_length=20, choices=CalculatedItemBaseType.choices)
