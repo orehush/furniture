@@ -42,6 +42,7 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'drf_yasg',
+    'webpack_loader',
 
     'apps.project',
     'apps.constructor',
@@ -63,7 +64,9 @@ ROOT_URLCONF = 'furniture.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            BASE_DIR / 'templates',
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -75,6 +78,13 @@ TEMPLATES = [
         },
     },
 ]
+
+WEBPACK_LOADER = {
+    'UI': {
+        'BUNDLE_DIR_NAME': 'bundles/',
+        'STATS_FILE': BASE_DIR / 'frontend/webpack-stats.prod.json',
+    },
+}
 
 WSGI_APPLICATION = 'furniture.wsgi.application'
 
@@ -138,7 +148,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Extra places for collectstatic to find static files.
 STATICFILES_DIRS = (
-    # os.path.join(BASE_DIR, 'static'),
+    BASE_DIR / 'static',
 )
 
 # Default primary key field type

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Furniture</title>
+</head>
+<body>
+{% load render_bundle from webpack_loader %}
+{% block css %}
+ {% render_bundle 'main' 'css' 'UI' %}
+{% endblock %}
+{% block content %}
+<div id="root"></div>
+{% endblock %}
+{% block script %}
+ {% render_bundle 'main' 'js' 'UI' %}
+{% endblock %}
+</body>
+</html>
