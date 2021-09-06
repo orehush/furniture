@@ -5,16 +5,18 @@ from .models import NightstandTemplate, NightstandInputItemTemplate, Nightstand,
     NightstandCalculatedItem
 
 
+class NightstandInputItemTemplateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NightstandInputItemTemplate
+        exclude = ('nightstand', )
+
+
 class NightstandTemplateSerializer(serializers.ModelSerializer):
     class Meta:
         model = NightstandTemplate
         fields = '__all__'
 
-
-class NightstandInputItemTemplateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = NightstandInputItemTemplate
-        exclude = ('nightstand', )
+    inputs = NightstandInputItemTemplateSerializer(many=True, read_only=True)
 
 
 class NightstandInputItemSerializer(serializers.ModelSerializer):
