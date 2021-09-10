@@ -14,31 +14,35 @@ const request = async (method, path, queryParams, data, headers) => {
             'Content-Type': 'application/json',
             ...(notEmpty(headers, {}))
         },
-        body: notEmpty(data, null)
+        body: isEmpty(data) ? null : JSON.stringify(data)
     });
     return await response.json();
 }
 
-const getProjects = (page = 1) => {
+export const getProjects = (page = 1) => {
     return request('GET', '/projects', { page });
 }
 
-const createProject = ({ city, street, name }) => {
+export const getProject = (id) => {
+    return request('GET', `/projects/${id}`);
+}
+
+export const createProject = ({ city, street, name }) => {
     return request('POST', `/projects`, null, { city, street, name });
 }
 
-const getProjectBoxes = (pk) => {
+export const getProjectBoxes = (pk) => {
     return request('GET', `/projects/${pk}/nightstands`);
 }
 
-const getBoxTemplates = () => {
+export const getBoxTemplates = () => {
     return request('GET', `/nightstand_templates`);
 }
 
-const createBox = (template, project, inputs) => {
+export const createBox = (template, project, inputs) => {
     return request('POST', '/nightstands', null, { template, project, inputs })
 }
 
-const deleteBox = (pk) => {
+export const deleteBox = (pk) => {
     return request('DELETE', '/nightstands')
 }
