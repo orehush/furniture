@@ -6,11 +6,12 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.decorators import action
 
 from apps.constructor.serializers import NightstandSerializer
+from apps.project.mixins import AuthClassesMixin
 from apps.project.models import Project
 from apps.project.serializers import ProjectSerializer
 
 
-class ProjectViewSet(ReadOnlyModelViewSet, CreateModelMixin):
+class ProjectViewSet(AuthClassesMixin, ReadOnlyModelViewSet, CreateModelMixin):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
     permission_classes = (permissions.IsAuthenticated, )
