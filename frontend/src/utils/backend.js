@@ -6,7 +6,7 @@ const notEmpty = (value, defaultValue) => {
 
 const request = async (method, path, queryParams, data, headers) => {
     const queryString = Object.entries(notEmpty(queryParams, {})).map(([key, value]) => `${key}=${value}`).join('&')
-    const response = await fetch(`/api/${path}?${queryString}`, {
+    const response = await fetch(`/api${path}?${queryString}`, {
         method: method.toUpperCase(),
         mode: 'cors',
         cache: 'no-cache',
