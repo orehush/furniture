@@ -8,7 +8,8 @@ export default function ProjectForm({ onFinish }) {
     const [street, setStreet] = useState('');
 
     return (
-        <Form>
+        <Form className="m-5">
+            <h3>Create New Project</h3>
             <FormGroup>
                 <Label for="name">Name</Label>
                 <Input type="text" name="name" id="name" placeholder="project name" value={name} onChange={(e) => setName(e.target.value)} />

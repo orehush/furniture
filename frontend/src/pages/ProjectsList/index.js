@@ -12,7 +12,7 @@ export default function ProjectsList() {
     const queryClient = useQueryClient();
     const [showForm, setShowForm] = useState(false);
 
-    return <div>
+    return <div className="m-5">
         <h1>Projects list</h1>
         {isLoading && <div>Loading...</div>}
         <ul>
