@@ -20,6 +20,26 @@ class NightstandTemplate(models.Model):
         return self.inputs.all()
 
 
+class GlobalInputValue(models.Model):
+    class Meta:
+        verbose_name = 'Глобальна змінна'
+        verbose_name_plural = 'Глобальні змінні'
+
+    name = models.CharField(max_length=255)
+    formula_name = models.CharField(max_length=50)
+    value = models.IntegerField()
+
+    @classmethod
+    def get_items(cls):
+        result = {}
+        for row in cls.objects.all().values('formula_name', 'value'):
+            result[row['formula_name']] = row['value']
+        return result
+
+    def __str__(self):
+        return self.name
+
+
 class NightstandInputItemTemplate(models.Model):
     class Meta:
         verbose_name = 'Шаблон вхідного параметру тумби'
@@ -111,7 +131,7 @@ class NightstandCalculatedItem(models.Model):
         formula = getattr(self.template, f'{field}_formula', None)
         if not formula:
             return None
-        return eval_formula(formula, inputs)
+        return eval_formula(formula, inputs, GlobalInputValue.get_items())
 
     def calculate(self):
         inputs = self.nightstand.get_inputs()

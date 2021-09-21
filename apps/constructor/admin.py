@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from .models import NightstandTemplate, NightstandInputItemTemplate, NightstandCalculatedItemTemplate, \
-    NightstandInputItem, NightstandCalculatedItem, Nightstand
+    NightstandInputItem, NightstandCalculatedItem, Nightstand, GlobalInputValue
 
 
 class NightstandInputItemTemplateInlineAdmin(admin.TabularInline):
@@ -25,11 +25,11 @@ class NightstandCalculatedItemInlineAdmin(admin.StackedInline):
     model = NightstandCalculatedItem
 
 
-@admin.register(NightstandCalculatedItem)
-class NightstandCalculatedItemAdmin(admin.ModelAdmin):
-    pass
-
-
 @admin.register(Nightstand)
 class NightstandAdmin(admin.ModelAdmin):
     inlines = (NightstandInputItemInlineAdmin, NightstandCalculatedItemInlineAdmin)
+
+
+@admin.register(GlobalInputValue)
+class GlobalInputValueAdmin(admin.ModelAdmin):
+    pass
