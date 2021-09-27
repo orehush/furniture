@@ -85,6 +85,7 @@ class NightstandCalculatedItemTemplate(models.Model):
     edge_formula = models.CharField(max_length=255, blank=True, default='')
     edge_extra_formula = models.CharField(max_length=255, blank=True, default='')
     drilling_count_formula = models.CharField(max_length=255, blank=True, default='')
+    rotation_formula = models.CharField(max_length=255, blank=True, default='')
 
     def __str__(self):
         return f'{self.name} для {self.nightstand}'
@@ -145,6 +146,7 @@ class NightstandCalculatedItem(models.Model):
     edge = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     edge_extra = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     drilling_count = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    rotation = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
 
     def __str__(self):
         return f'{self.template} для {self.nightstand}'
@@ -165,6 +167,7 @@ class NightstandCalculatedItem(models.Model):
         self.edge = self._calculate('edge', inputs)
         self.edge_extra = self._calculate('edge_extra', inputs)
         self.drilling_count = self._calculate('drilling_count', inputs)
+        self.rotation = self._calculate('rotation', inputs)
 
     def save(self, **kwargs):
         if not self.edited:
