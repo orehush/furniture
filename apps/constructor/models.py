@@ -11,7 +11,20 @@ class NightstandTemplate(models.Model):
         verbose_name_plural = 'Шаблони тумб'
 
     name = models.CharField(max_length=255)
+    short_name_formula = models.CharField(max_length=100, default='', blank=True)
     image = models.ImageField(null=True, blank=True)
+
+    @property
+    def default_short_name_formula(self):
+        return '%s{width//10}/{height//10}' % self.name
+
+    def get_short_name_formula(self):
+        return f'f"{self.short_name_formula or self.default_short_name_formula}"'
+
+    def save(self, **kwargs):
+        if not self.short_name_formula:
+            self.short_name_formula = self.default_short_name_formula
+        super(NightstandTemplate, self).save(**kwargs)
 
     def __str__(self):
         return self.name
@@ -84,9 +97,17 @@ class Nightstand(models.Model):
 
     template = models.ForeignKey(NightstandTemplate, on_delete=models.CASCADE)
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='nightstands')
+    short_name = models.CharField(max_length=100, default='', blank=True)
+
+    def _calculate_short_name(self):
+        return eval_formula(self.template.get_short_name_formula(), self.get_inputs(), GlobalInputValue.get_items())
+
+    def save(self, **kwargs):
+        self.short_name = self._calculate_short_name()
+        super(Nightstand, self).save(**kwargs)
 
     def __str__(self):
-        return f'{self.template}'
+        return f'{self.short_name} / {self.project}'
 
     def get_inputs(self):
         result = {}
@@ -115,6 +136,7 @@ class NightstandCalculatedItem(models.Model):
 
     template = models.ForeignKey(NightstandCalculatedItemTemplate, on_delete=models.CASCADE)
     nightstand = models.ForeignKey(Nightstand, on_delete=models.CASCADE, related_name='outputs')
+    edited = models.BooleanField(default=False, blank=True)
     width = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     length = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
@@ -145,5 +167,6 @@ class NightstandCalculatedItem(models.Model):
         self.drilling_count = self._calculate('drilling_count', inputs)
 
     def save(self, **kwargs):
-        self.calculate()
+        if not self.edited:
+            self.calculate()
         super(NightstandCalculatedItem, self).save(**kwargs)

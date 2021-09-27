@@ -6,10 +6,12 @@ from .models import NightstandTemplate, NightstandInputItemTemplate, NightstandC
 
 class NightstandInputItemTemplateInlineAdmin(admin.TabularInline):
     model = NightstandInputItemTemplate
+    extra = 0
 
 
 class NightstandCalculatedItemTemplateInlineAdmin(admin.StackedInline):
     model = NightstandCalculatedItemTemplate
+    extra = 0
 
 
 @admin.register(NightstandTemplate)
@@ -19,10 +21,12 @@ class NightstandTemplateAdmin(admin.ModelAdmin):
 
 class NightstandInputItemInlineAdmin(admin.TabularInline):
     model = NightstandInputItem
+    extra = 0
 
 
 class NightstandCalculatedItemInlineAdmin(admin.StackedInline):
     model = NightstandCalculatedItem
+    extra = 0
 
 
 @admin.register(Nightstand)
