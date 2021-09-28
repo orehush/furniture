@@ -16,7 +16,12 @@ const request = async (method, path, queryParams, data, headers) => {
         },
         body: isEmpty(data) ? null : JSON.stringify(data)
     });
-    return await response.json();
+    try {
+        return await response.json();
+    } catch (e) {
+        console.log(e);
+        return null;
+    }
 }
 
 export const getProjects = (page = 1) => {
@@ -44,5 +49,9 @@ export const createBox = (template, project, inputs) => {
 }
 
 export const deleteBox = (pk) => {
-    return request('DELETE', '/nightstands')
+    return request('DELETE', `/nightstands/${pk}`)
+}
+
+export const updateInput = (pk, value) => {
+    return request('PUT', `/inputs/${pk}`, null, { value })
 }
