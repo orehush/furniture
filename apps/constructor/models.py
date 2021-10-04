@@ -101,7 +101,9 @@ class Nightstand(models.Model):
     short_name = models.CharField(max_length=100, default='', blank=True)
 
     def _calculate_short_name(self):
-        return eval_formula(self.template.get_short_name_formula(), self.get_inputs(), GlobalInputValue.get_items())
+        return eval_formula(
+            self.template.get_short_name_formula(), self.get_inputs(), GlobalInputValue.get_items()
+        ) or self.template.name
 
     def save(self, **kwargs):
         self.short_name = self._calculate_short_name()
