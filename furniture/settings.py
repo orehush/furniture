@@ -43,9 +43,11 @@ INSTALLED_APPS = [
     'rest_framework',
     'drf_yasg',
     'webpack_loader',
+    'bootstrap5',
 
     'apps.project',
     'apps.constructor',
+    'apps.accounts',
 ]
 
 MIDDLEWARE = [

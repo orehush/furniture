@@ -1,0 +1,57 @@
+{% extends 'accounts/base.html' %}
+
+{% block content %}
+    <h2>Журнал операцій</h2>
+
+    <a class="button btn btn-secondary" href="/create_document">Додати документ</a>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Дата</th>
+                <th>Назва документу</th>
+                <th>Номер документу</th>
+                <th>Рахунок дебету</th>
+                <th>Рахунок кредиту</th>
+                <th>Сума</th>
+                <th>Зміст</th>
+                <th>Статус</th>
+            </tr>
+        </thead>
+        {% for document in documents %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ document.created | date }}</td>
+            <td>{{ document.get_type_display }}</td>
+            <td>{{ document.number }}</td>
+            <td>{{ document.debit_account }}</td>
+            <td>{{ document.credit_account }}</td>
+            <td>{{ document.amount }}</td>
+            <td>{{ document.note }}</td>
+            <td>
+                {{ document.get_status_display }}
+                {% if document.status == 'accounted' %}
+                    <button class="btn btn-secondary" onclick="cancelDocument({{ document.id }})">Скасувати проведення</button>
+                {% else %}
+                    <button class="btn btn-primary" onclick="approveDocument({{ document.id }})">Провести</button>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+
+    <script>
+        async function approveDocument(docId) {
+            await fetch(`/documents/${docId}/approve`, { method: 'POST' })
+            location.reload()
+        }
+
+        async function cancelDocument(docId) {
+            await fetch(`/documents/${docId}/cancel`, { method: 'POST' })
+            location.reload()
+        }
+    </script>
+
+{% endblock %}

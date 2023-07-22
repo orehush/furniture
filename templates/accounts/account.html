@@ -1,0 +1,52 @@
+{% extends 'accounts/base.html' %}
+
+{% block content %}
+
+    <h2>Картка рахунку 63</h2>
+
+    <div class="row">
+        <label for="start">Початкова дата:</label>
+        <input type="date" id="start_date">
+        <label for="start">Кінцева дата:</label>
+        <input type="date" id="end_date">
+    </div>
+
+    <button class="btn btn-primary" onclick="refresh()">Відфільтрувати</button>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Дата</th>
+                <th>Дебет</th>
+                <th>Кредит</th>
+                <th>Контрагент</th>
+            </tr>
+        </thead>
+        {% for transfer in transfers %}
+        <tr>
+            <td>{{ transfer.created | date }}</td>
+            <td>{{ transfer.debit|default:'' }}</td>
+            <td>{{ transfer.credit|default:'' }}</td>
+            <td>{{ transfer.account.counter_party.name }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <script>
+        function refresh() {
+            const startDate = document.getElementById('start_date')
+            const endDate = document.getElementById('end_date')
+
+            window.location.replace(`/account63?start_date=${startDate.value}&end_date=${endDate.value}`);
+        }
+
+        (function (){
+            const urlParams = new URLSearchParams(window.location.search);
+            const startDate = urlParams.get('start_date');
+            const endDate = urlParams.get('end_date');
+
+            document.getElementById("start_date").value = startDate;
+            document.getElementById("end_date").value = endDate;
+        })()
+    </script>
+{% endblock %}
