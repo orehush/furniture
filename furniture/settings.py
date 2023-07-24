@@ -27,7 +27,9 @@ SECRET_KEY = 'django-insecure-1r3n^g#)bfw9rz_#cf$=0m)935n&fpxqlaey(5f(=w=n2!$81h
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'furniture-snyatyn-fd7d7a6b4e9f.herokuapp.com'
+]
 
 
 # Application definition
@@ -100,8 +102,12 @@ REST_FRAMEWORK = {
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': '6nhdTWHsxvTxmGIF',
+        'HOST': 'db.jgenxttjlamjgoyujsne.supabase.co',
+        'PORT': '5432',
     }
 }
 
