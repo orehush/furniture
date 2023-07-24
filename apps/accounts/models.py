@@ -15,6 +15,14 @@ class CounterParty(models.Model):
     def __str__(self):
         return self.name
 
+    def save(self, **kwargs):
+        is_new_obj = False
+        if not self.pk:
+            is_new_obj = True
+        super(CounterParty, self).save(**kwargs)
+        if is_new_obj:
+            Account.objects.create(counter_party=self, type=AccountType.CounterPartyDesk.value)
+
 
 class Product(models.Model):
     class Meta:

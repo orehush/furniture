@@ -28,7 +28,8 @@ SECRET_KEY = 'django-insecure-1r3n^g#)bfw9rz_#cf$=0m)935n&fpxqlaey(5f(=w=n2!$81h
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'furniture-snyatyn-fd7d7a6b4e9f.herokuapp.com'
+    'furniture-snyatyn-fd7d7a6b4e9f.herokuapp.com',
+    '127.0.0.1'
 ]
 
 
